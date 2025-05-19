@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class PowerBIScraper:
     def __init__(self, user, json_path, chrome_driver_path):
         self.user = user
-        self.password = kr.get_password('powerbi', user)
+        self.password = kr.get_password('PowerBI', user)
         self.json_path = json_path
         self.chrome_driver_path = chrome_driver_path
         self.driver = None
