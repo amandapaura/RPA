@@ -2,6 +2,7 @@ import os
 from api_extractor import gerar_json_relatorios
 from scraper import PowerBIScraper
 from pbi_workdpaces_reports import PowerBIReportCollector
+import keyring as kr
 
 
 if __name__ == '__main__':
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     user_email = "email@email.com"
 
     # Passo 1: Gerar JSON com os relatórios a partir da API
-    collector = PowerBIReportCollector(user_email)
+    collector = PowerBIReportCollector(kr)
     collector.run()
     
     # Passo 2: Executar o scraping no Power BI Web
