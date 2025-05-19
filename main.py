@@ -1,7 +1,7 @@
 import os
 from api_extractor import gerar_json_relatorios
 from scraper import PowerBIScraper
-from .. import PowerBIReportCollector
+from pbi_workdpaces_reports import PowerBIReportCollector
 import keyring as kr
 
 if __name__ == '__main__':
