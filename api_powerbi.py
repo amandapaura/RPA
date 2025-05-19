@@ -3,10 +3,11 @@ import time
 import datetime
 import requests
 import msal
+import keyring as kr
 
 class PowerBIExporter:
-    def __init__(self, kr, base_path='C:/user/amandapaura/backup/PowerBi'):
-        self.kr = kr
+    def __init__(self, user_email, base_path='C:/user/amandapaura/backup/PowerBi'):
+        sefl.user = user_email
         self.base_path = base_path
         self.tenant_id = kr.get_password('PowerBI', 'tenant_id')
         self.client_id = kr.get_password('PowerBI', 'client_id')
@@ -22,9 +23,8 @@ class PowerBIExporter:
             client_credential=self.client_secret
         )
 
-        user = self.kr.get_password('PowerBI', 'user')
-        password = self.kr.get_password('PowerBI', 'password')
-        result = app.acquire_token_by_username_password(user, password, scopes=self.scope)
+        password = kr.get_password('PowerBI', self.user)
+        result = app.acquire_token_by_username_password(self.user, password, scopes=self.scope)
 
         if "access_token" in result:
             return result['access_token']
