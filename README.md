@@ -7,11 +7,13 @@ This project automates the process of extracting information from Power BI works
 
 📁 Project Structure
 
-api_powerbi.py – Functions to connect to the Power BI API (authentication).
+api_powerbi.py – Class with methods to connect to the Power BI API (authentication).
 
-get_pbi_workspaces_reports.py – Connects to the API and exports a JSON with workspace and report details (including URLs).
+pbi_workspaces_reports.py – Connects to the API and exports a JSON with workspace and report details (including URLs).
 
-download_pbix_web_scrap.py – Uses Selenium to open report URLs and download the PBIX files via web scraping.
+pbi_web_scraping.py – Uses Selenium to open report URLs and download the PBIX files via web scraping.
+
+main.py - execute json collection and scraper
 
 
 🛠️ Features
@@ -34,6 +36,8 @@ Requests
 Selenium
 
 ChromeDriver
+
+Keyring 
 
 
 ⚠️ Make sure you have access permissions to the Power BI service and reports.
