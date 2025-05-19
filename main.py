@@ -1,6 +1,6 @@
 import os
 from pbi_web_scraping import PowerBIScraper
-from pbi_workdpaces_reports import PowerBIReportCollector
+from pbi_workspaces_reports import PowerBIReportCollector
 
 
 if __name__ == '__main__':
