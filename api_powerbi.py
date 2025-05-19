@@ -7,7 +7,7 @@ import keyring as kr
 
 class PowerBIExporter:
     def __init__(self, user_email, base_path='C:/user/amandapaura/backup/PowerBi'):
-        sefl.user = user_email
+        self.user = user_email
         self.base_path = base_path
         self.tenant_id = kr.get_password('PowerBI', 'tenant_id')
         self.client_id = kr.get_password('PowerBI', 'client_id')
