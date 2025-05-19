@@ -1,6 +1,6 @@
 import os
 from api_extractor import gerar_json_relatorios
-from scraper import PowerBIScraper
+from pbi_web_scraping import PowerBIScraper
 from pbi_workdpaces_reports import PowerBIReportCollector
 
 
