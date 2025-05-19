@@ -1,52 +1,43 @@
-import json
-import pbirest
-import msal
-from extensao import *;
-from tqdm import tqdm
 import os
-import datetime
-from api_powerbi import *;
+import json
+import traceback
+from tqdm import tqdm
+from api_powerbi import PowerBIExporter  # classe anterior já criada 
 
-# ----------------------------------------------------
-# -------------- EXECUTION --------------------------
-# -----------------------------------------------------
+class PowerBIReportCollector(PowerBIExporter):
+    def __init__(self, kr, base_path='C:/user/amandapaura/backup/PowerBi', output_file='workspaces_reports.json'):
+        super().__init__(kr, base_path)
+        self.output_file = output_file
+        self.report_links = {}
 
-ws_rel = {}
+    def collect_report_urls(self):
+        try:
+            workspaces = self.get_workspaces().get('value', [])
 
-try:
-    ## ---- Connecting to the Power BI service -----------
-    token = get_token()
+            for ws in tqdm(workspaces, desc='Coletando Workspaces'):
+                workspace_name = ws['name']
+                workspace_id = ws['id']
+                reports = self.get_reports(workspace_id).get('value', [])
 
-    #---- Listing workspaces-----
-    workspaces = get_workspaces(token).get('value',[])
+                self.report_links[workspace_id] = {
+                    "ws_name": workspace_name,
+                    "relatorios": {}
+                }
 
-    export_failures = {}
+                for report in reports:
+                    report_id = report['id']
+                    url = report['webUrl']
+                    self.report_links[workspace_id]['relatorios'][report_id] = url
 
-    for ws in tqdm(workspaces, desc='Workspaces'):
-        workspace_name = ws['name']
-        workspace_id = ws['id']
+        except BaseException as erro:
+            print("Erro na coleta de relatórios.")
+            print(traceback.format_exc())
 
-        ## listing reports
-        reports = get_reports(token, workspace_id ).get('value',[])
+    def save_to_json(self):
+        with open(self.output_file, 'w', encoding='utf-8') as f:
+            json.dump(self.report_links, f, indent=4, ensure_ascii=False)
+        print(f"JSON com relatórios salvo em: {self.output_file}")
 
-        if workspace_id not in ws_rel:
-            ws_rel[workspace_id] = {}
-            ws_rel[workspace_id]['ws_name'] = workspace_name
-            ws_rel[workspace_id]['relatorios'] = {}
-
-        for report in reports:
-            url = report['webUrl']
-            rep_id = report['id']
-            ws_rel[workspace_id]['relatorios'][rep_id] = url
-
-
-except BaseException as erro:
-       erro_traceback = traceback.format_exc()
-
-#-- ---------------------------------------------------------------------------------------------------
-# Saving as JSON
-with open('workspaces_reports.json', 'w', encoding='utf-8') as f:
-    json.dump(ws_rel, f, indent=4, ensure_ascii=False)
-
-# ------------ log final ---------------
-print('Json file created. Export successfuly done')
+    def run(self):
+        self.collect_report_urls()
+        self.save_to_json()
