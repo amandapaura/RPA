@@ -6,7 +6,7 @@ import keyring as kr
 
 
 if __name__ == '__main__':
-    base_path = 'C:/user/amandapaura/backup/PowerBi'
+    base_path = 'C:/user/amandapaura/backup/PowerBi' #example 
     json_path = os.path.join(base_path, 'workspaces_relatorios.json')
     chrome_driver_path = "C:/chromedriver/chromedriver.exe"
     user_email = "email@email.com"
