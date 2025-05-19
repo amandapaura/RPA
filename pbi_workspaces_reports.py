@@ -5,7 +5,7 @@ from tqdm import tqdm
 from api_powerbi import PowerBIExporter  # classe anterior já criada 
 
 class PowerBIReportCollector(PowerBIExporter):
-    def __init__(self, kr, base_path='C:/user/amandapaura/backup/PowerBi', output_file='workspaces_reports.json'):
+    def __init__(self, user_email, base_path='C:/user/amandapaura/backup/PowerBi', output_file='workspaces_reports.json'):
         super().__init__(kr, base_path)
         self.output_file = output_file
         self.report_links = {}
