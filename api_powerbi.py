@@ -5,6 +5,7 @@ import requests
 import msal
 import keyring as kr
 
+
 class PowerBIExporter:
     def __init__(self, user_email, base_path='C:/user/amandapaura/backup/PowerBi'):
         self.user = user_email
@@ -23,10 +24,11 @@ class PowerBIExporter:
             client_credential=self.client_secret
         )
 
-        password = kr.get_password('PowerBI', self.user)
+        password = kr.get_password('powerbi', self.user)
         result = app.acquire_token_by_username_password(self.user, password, scopes=self.scope)
 
         if "access_token" in result:
+            print('Token gerado com sucesso')
             return result['access_token']
         else:
             raise Exception("Erro ao adquirir token de acesso.")
@@ -113,3 +115,6 @@ class PowerBIExporter:
         else:
             print(f"Erro ao iniciar exportação: {response.status_code} - {response.text}")
 
+
+
+exporter = PowerBIExporter('svcpowerbi@ocyan-sa.com')
