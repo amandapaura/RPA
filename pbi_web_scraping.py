@@ -13,10 +13,10 @@ from selenium.webdriver.support import expected_conditions as EC
 class PowerBIScraper:
     def __init__(self, user, json_path, chrome_driver_path):
         self.user = user
-        self.password = kr.get_password('PowerBI', user)
+        self.password = kr.get_password('powerbi', user)
         self.json_path = json_path
         self.chrome_driver_path = chrome_driver_path
-        self.driver = None
+        self.driver = self.setup_driver()
         self.reports_data = self.load_reports()
 
     def load_reports(self):
@@ -28,22 +28,25 @@ class PowerBIScraper:
             json.dump(self.reports_data, f, indent=4, ensure_ascii=False)
 
     def setup_driver(self):
-        options = Options()
-        options.add_argument("--headless")  # Remova se quiser ver o navegador
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")  # remove se quiser ver o navegador
         options.add_argument("--window-size=1920,1080")
-        self.driver = webdriver.Chrome(executable_path=self.chrome_driver_path, options=options)
+        options.add_argument("--disable-gpu")
+        return webdriver.Chrome()
 
     def login(self):
-        self.driver.get("https://app.powerbi.com/")
-        WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, "email"))).send_keys(self.user)
-        self.driver.find_element(By.ID, "email").send_keys(Keys.RETURN)
-
-        WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.NAME, "passwd"))).send_keys(self.password)
-        self.driver.find_element(By.NAME, "passwd").send_keys(Keys.RETURN)
-
-        # Tentar clicar em "Não" na pergunta de manter login
-        time.sleep(2)
         try:
+            time.sleep(5)
+            self.driver.get("https://app.powerbi.com/")
+            time.sleep(3)
+            WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, "email"))).send_keys(self.user)
+            self.driver.find_element(By.ID, "email").send_keys(Keys.RETURN)
+
+            WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.NAME, "passwd"))).send_keys(self.password)
+            self.driver.find_element(By.NAME, "passwd").send_keys(Keys.RETURN)
+
+            # Tentar clicar em "Não" na pergunta de manter login
+            time.sleep(2)
             self.driver.find_element(By.ID, "idBtn_Back").click()
         except:
             pass
